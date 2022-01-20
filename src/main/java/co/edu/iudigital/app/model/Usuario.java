@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="usuarios")
@@ -28,6 +31,8 @@ public class Usuario implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty(message = "Email es obligatorio")
+	@Email(message = "Debe ingresar un email valido")
 	@Column(unique = true, length = 120)
 	private String username;
 	
@@ -36,9 +41,12 @@ public class Usuario implements Serializable{
 	@Column(length = 250)
 	private String password;
 	
+	@NotEmpty(message = "Nombre es obligatorio")
 	@Column(nullable = false, length = 120)
 	private String nombre;
 	
+	@NotEmpty(message = "Apellido es obligatorio")
+	@Size(min =1, max = 120, message = "No esta en el rango")
 	@Column(nullable = true, length = 120)
 	private String apellido;
 	
