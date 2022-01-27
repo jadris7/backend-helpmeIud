@@ -5,13 +5,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.iudigital.app.dto.DelitoDto;
+import co.edu.iudigital.app.exception.ErrorDto;
+import co.edu.iudigital.app.exception.NotFoundException;
+import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Delito;
 import co.edu.iudigital.app.repository.IDelitoRepository;
 import co.edu.iudigital.app.service.iface.IDelitoService;
+import co.edu.iudigital.app.util.ConstUtil;
 
 @Service
 public class DelitoServiceImpl implements IDelitoService{
@@ -61,11 +66,17 @@ public class DelitoServiceImpl implements IDelitoService{
 
 	@Override
 	@Transactional
-	public void delete(Long id) {
+	public void delete(Long id) throws RestException{
 		Optional<Delito> delito = delitoRepository.findById(id);
 		if(delito.isPresent()) {
 			delitoRepository.deleteById(id);
-		}	
+		}else {
+			throw new NotFoundException(ErrorDto.getErrorDto(
+					HttpStatus.NOT_FOUND.getReasonPhrase(),
+					ConstUtil.MESSAGE_NOT_FOUNT,
+					HttpStatus.NOT_FOUND.value())
+					);
+		}
 		
 	}
 

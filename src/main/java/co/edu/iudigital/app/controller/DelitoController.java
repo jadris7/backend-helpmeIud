@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.iudigital.app.dto.DelitoDto;
+import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Delito;
 import co.edu.iudigital.app.service.iface.IDelitoService;
 import io.swagger.annotations.Api;
@@ -84,7 +85,7 @@ public class DelitoController {
 			httpMethod ="POST")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@DeleteMapping("/delito/{id}")
-	public void delete(@PathVariable Long id) {
+	public void delete(@PathVariable Long id)throws RestException {
 		delitoService.delete(id);
 	}
 }
