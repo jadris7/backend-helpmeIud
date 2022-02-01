@@ -2,16 +2,21 @@ package co.edu.iudigital.app.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import co.edu.iudigital.app.dto.UsuarioDto;
+import co.edu.iudigital.app.exception.ErrorDto;
+import co.edu.iudigital.app.exception.NotFoundException;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.repository.IUsuarioRepository;
 import co.edu.iudigital.app.service.iface.IUsuarioService;
+import co.edu.iudigital.app.util.ConstUtil;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService{
@@ -44,9 +49,16 @@ public class UsuarioServiceImpl implements IUsuarioService{
 	}
 
 	@Override
-	public Usuario listerUser(Long id) throws RestException {
-		// TODO Auto-generated method stub
-		return null;
+	public Usuario listUser(Long id) throws RestException {
+		Optional<Usuario> usuarioDB = usuarioRepository.findById(id);
+		if(!usuarioDB.isPresent()) {
+			throw  new NotFoundException(ErrorDto.getErrorDto(
+			HttpStatus.NOT_FOUND.getReasonPhrase(),
+			ConstUtil.MESSAGE_NOT_FOUNT,
+			HttpStatus.NOT_FOUND.value())
+		);
+		}
+		return usuarioRepository.findById(id).get();
 	}
 
 	@Override
