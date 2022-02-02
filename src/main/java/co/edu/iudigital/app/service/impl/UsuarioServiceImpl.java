@@ -2,6 +2,7 @@ package co.edu.iudigital.app.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import co.edu.iudigital.app.dto.UsuarioDto;
+import co.edu.iudigital.app.exception.BadRequestException;
 import co.edu.iudigital.app.exception.ErrorDto;
 import co.edu.iudigital.app.exception.NotFoundException;
 import co.edu.iudigital.app.exception.RestException;
+import co.edu.iudigital.app.model.Role;
 import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.repository.IUsuarioRepository;
 import co.edu.iudigital.app.service.iface.IUsuarioService;
@@ -63,8 +66,19 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
 	@Override
 	public Usuario saveUser(Usuario usuario) throws RestException {
-		// TODO Auto-generated method stub
-		return null;
+		if(Objects.isNull(usuario)) {
+			throw  new BadRequestException(ErrorDto.getErrorDto(
+			HttpStatus.BAD_REQUEST.getReasonPhrase(),
+			ConstUtil.MESSAGE_NOT_FOUNT, //Crear constante 
+			HttpStatus.BAD_REQUEST.value())
+		);
+		}
+		List<Role> roles = new ArrayList<>();
+		Role role = new Role();
+		role.setId(2L);
+		roles.add(role);
+		usuario.setRoles(roles);
+		return usuarioRepository.save(usuario);
 	}
 
 	@Override
