@@ -73,6 +73,15 @@ public class UsuarioServiceImpl implements IUsuarioService{
 			HttpStatus.BAD_REQUEST.value())
 		);
 		}
+		
+		Usuario usuarioDb = usuarioRepository.findByUsername(usuario.getUsername());
+		if(Objects.nonNull(usuarioDb)) {
+			throw new BadRequestException(ErrorDto.getErrorDto(
+					HttpStatus.BAD_REQUEST.getReasonPhrase(),
+					"Usuario ya existe",
+					 HttpStatus.BAD_REQUEST.value()));
+		}
+		
 		List<Role> roles = new ArrayList<>();
 		Role role = new Role();
 		role.setId(2L);

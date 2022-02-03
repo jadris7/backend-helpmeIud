@@ -2,6 +2,9 @@ package co.edu.iudigital.app.util;
 
 public interface ConstUtil {
 	
-	public static final String MESSAGE_NOT_FOUNT = "No encontró el delito";
+	String MESSAGE_NOT_FOUNT = "No encontró el delito";
+	
+	//Email
+	String ASUNTO_MESSAGE ="Registro en HelpmeIUD";
 
 }
