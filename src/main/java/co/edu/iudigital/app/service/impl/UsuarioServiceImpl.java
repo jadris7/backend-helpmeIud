@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.iudigital.app.dto.UsuarioDto;
 import co.edu.iudigital.app.exception.BadRequestException;
@@ -27,6 +28,7 @@ public class UsuarioServiceImpl implements IUsuarioService{
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<UsuarioDto> listUsers() throws RestException {
 		
@@ -50,7 +52,8 @@ public class UsuarioServiceImpl implements IUsuarioService{
 		return usuarios;
 
 	}
-
+	
+	@Transactional(readOnly = true)
 	@Override
 	public Usuario listUser(Long id) throws RestException {
 		Optional<Usuario> usuarioDB = usuarioRepository.findById(id);
@@ -64,12 +67,13 @@ public class UsuarioServiceImpl implements IUsuarioService{
 		return usuarioRepository.findById(id).get();
 	}
 
+	@Transactional
 	@Override
 	public Usuario saveUser(Usuario usuario) throws RestException {
 		if(Objects.isNull(usuario)) {
 			throw  new BadRequestException(ErrorDto.getErrorDto(
 			HttpStatus.BAD_REQUEST.getReasonPhrase(),
-			ConstUtil.MESSAGE_NOT_FOUNT, //Crear constante 
+			ConstUtil.MESSAGE_NOT_FOUNT,
 			HttpStatus.BAD_REQUEST.value())
 		);
 		}
@@ -90,10 +94,25 @@ public class UsuarioServiceImpl implements IUsuarioService{
 		return usuarioRepository.save(usuario);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Usuario listByUsername(String usuario) throws RestException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return usuarioRepository.findByUsername(usuario);
+	}
+
+
+	@Transactional
+	@Override
+	public Usuario updateUser(Usuario usuario) throws RestException {
+		if(Objects.isNull(usuario)) {
+			throw new BadRequestException(ErrorDto.getErrorDto(
+					HttpStatus.BAD_REQUEST.getReasonPhrase(), 
+					ConstUtil.MESSAGE_BAD_REQUEST, //TODO: CREAR CONSTANTE EN CONSUTIL
+					HttpStatus.BAD_REQUEST.value())
+				);
+		}
+		return usuarioRepository.save(usuario);
 	}
 
 }

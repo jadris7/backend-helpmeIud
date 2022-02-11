@@ -6,5 +6,7 @@ public interface ConstUtil {
 	
 	//Email
 	String ASUNTO_MESSAGE ="Registro en HelpmeIUD";
+	
+	String MESSAGE_BAD_REQUEST = "Mala petición";
 
 }

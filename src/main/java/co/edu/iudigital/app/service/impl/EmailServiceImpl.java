@@ -40,6 +40,7 @@ public class EmailServiceImpl implements IEmailService{
 			sender.send(msg);
 			sent = true;
 		} catch (MessagingException e) {
+			e.printStackTrace();
 			log.error("Error{}", e);
 		}
 		return sent;
